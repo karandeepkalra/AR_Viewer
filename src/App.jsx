@@ -5,8 +5,7 @@ import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader";
 import { TextureLoader } from "three";
-// import { Pathtracer, usePathtracer } from "@react-three/gpu-pathtracer";
-// Configuration Constants
+
 const ENVIRONMENT_PRESETS = [
   { name: "Compact Studio", url: "/xyz1.hdr" },
   { name: "Golden Hour", url: "/xyz2.hdr" },
@@ -80,6 +79,7 @@ function VehicleModel({
   const modelRef = useRef();
   const vehicleModel = useLoader(GLTFLoader, selectedModelUrl);
   const [modelScene, setModelScene] = useState(null);
+  const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
     // Clone the original model to avoid modifying the original
@@ -114,7 +114,7 @@ function VehicleModel({
   }, [modelScene, selectedModelColor, selectedModelIndex]);
 
   useFrame(() => {
-    if (modelRef.current) {
+    if (modelRef.current&& !isHovered) {
       modelRef.current.rotation.y += 0.005;
     }
   });
@@ -127,6 +127,8 @@ function VehicleModel({
       ref={modelRef}
       scale={1}
       position={[0, -0.99, 0]}
+      onPointerOver={() => setIsHovered(true)} // Stop rotation on hover
+      onPointerOut={() => setIsHovered(false)} 
     />
   );
 }
