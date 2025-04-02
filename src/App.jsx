@@ -1806,22 +1806,7 @@ useEffect(() => {
           </button>
         </div>
         
-        <div style={{ marginTop: "10px", display: "flex", gap: "10px" }}>
-          <button 
-            onClick={copyARLinkToClipboard}
-            style={{
-              padding: "8px 15px",
-              backgroundColor: "#9C27B0",
-              color: "white",
-              border: "none",
-              borderRadius: "4px",
-              cursor: "pointer",
-              flex: "1"
-            }}
-          >
-            Copy AR Link
-          </button>
-          
+        <div style={{ marginTop: "10px", display: "flex", gap: "10px" }}>          
           <button 
             onClick={() => {
               const qrModal = document.getElementById('qr-modal');
