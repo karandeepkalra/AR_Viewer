@@ -2084,6 +2084,8 @@ const MODEL_PRESETS = [
   { name: "Sports Bike", url: "/Karandeep.glb", dimensions: { length: "2.1m", width: "0.8m", height: "1.2m" } },
   { name: "Sports Car", url: "/mod1.glb", dimensions: { length: "4.5m", width: "1.9m", height: "1.3m" } },
   { name: "Luxury Sedan", url: "/mod3.glb", dimensions: { length: "5.1m", width: "1.9m", height: "1.5m" } },
+  {name: "sphere",url:"/bamaa33.glb", dimensions: { length: "5.1m", width: "1.9m", height: "1.5m" }},
+  // {name: "monkey",url:"bamaa33/.glb", dimensions: { length: "5.1m", width: "1.9m", height: "1.5m" }}
 ];
 
 const MODEL_COLORS = [
@@ -2413,6 +2415,7 @@ function ARModelViewer({ modelUrl, modelIndex, selectedModelColor }) {
   const iosSupportText = "iOS 12+ on Safari";
   const androidSupportText = "Android 8.0+ on ARCore supported devices";
   const modelViewerRef = useRef(null);
+  const iosModelPath = modelUrl.replace('.glb', '.usdz');
   
   // Apply color change to model if needed
   useEffect(() => {
@@ -2435,10 +2438,11 @@ function ARModelViewer({ modelUrl, modelIndex, selectedModelColor }) {
       
       <div style={{ maxWidth: "500px", margin: "0 auto" }}>
         {/* @ts-ignore */}
+
         <model-viewer
           ref={modelViewerRef}
           src={modelUrl}
-          ios-src={modelUrl} // fallback for iOS
+          ios-src={iosModelPath} // fallback for iOS
           alt={`3D model of ${MODEL_PRESETS[modelIndex].name}`}
           ar
           ar-modes="webxr scene-viewer quick-look"
@@ -2517,8 +2521,39 @@ export default function VehicleShowcase() {
 
   // Check URL parameters for AR mode on load
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
+  //   const params = new URLSearchParams(window.location.search);
+  //   if (params.get('ar') === 'true') {
+  //     // setShowARViewer(true);
+  //     const modelParam = params.get('model');
+  //     if (modelParam !== null) {
+  //       const parsedModelIndex = parseInt(modelParam, 10);
+  //       if (!isNaN(parsedModelIndex) && parsedModelIndex >= 0 && parsedModelIndex < MODEL_PRESETS.length) {
+  //         setModelIndex(parsedModelIndex);
+  //   }
+  // }, []);
+  const params = new URLSearchParams(window.location.search);
+    
+    // Check for AR mode
     if (params.get('ar') === 'true') {
+      // Parse model index if present
+      const modelParam = params.get('model');
+      if (modelParam !== null) {
+        const parsedModelIndex = parseInt(modelParam, 10);
+        if (!isNaN(parsedModelIndex) && parsedModelIndex >= 0 && parsedModelIndex < MODEL_PRESETS.length) {
+          setModelIndex(parsedModelIndex);
+        }
+      }
+      
+      // Parse color index if present
+      const colorParam = params.get('color');
+      if (colorParam !== null) {
+        const parsedColorIndex = parseInt(colorParam, 10);
+        if (!isNaN(parsedColorIndex) && parsedColorIndex >= 0 && parsedColorIndex < MODEL_COLORS.length) {
+          setModelColorIndex(parsedColorIndex);
+        }
+      }
+      
+      // Show AR viewer
       setShowARViewer(true);
     }
   }, []);
@@ -2556,7 +2591,9 @@ export default function VehicleShowcase() {
 
   // Generate shareable AR link
   const getShareableARLink = () => {
-    return `${window.location.origin}${window.location.pathname}?model=${modelIndex}&color=${modelColorIndex}&ar=true`;
+    const selectedModelUrl = MODEL_PRESETS[modelIndex].url
+    // return `${window.location.origin}${window.location.pathname}?model=${modelIndex}&color=${modelColorIndex}&ar=true`;
+    return `${window.location.origin}${window.location.pathname}?model=${modelIndex}&color=${modelColorIndex}&ar=true&modelUrl=${encodeURIComponent(selectedModelUrl)}`;
   };
 
   // Copy AR link to clipboard
