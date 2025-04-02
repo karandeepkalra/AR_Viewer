@@ -17,10 +17,12 @@
     "@react-three/xr": "^5.7.1",
     "drei": "^2.2.21",
     "html5-qrcode": "^2.3.8",
-    "qrcode.react": "^3.2.0",
+    "qrcode.react": "^4.2.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "three": "^0.169.0"
+    "stats-gl": "^2.2.0",
+    "three": "^0.163.0",
+    "troika-three-text": "^0.52.3"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",
